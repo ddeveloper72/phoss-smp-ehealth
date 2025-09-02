@@ -36,8 +36,8 @@ EXPOSE 8080
 HEALTHCHECK --interval=30s --timeout=3s --start-period=60s --retries=3 \
   CMD curl -f http://localhost:${PORT:-8080}/ || exit 1
 
-# Set environment variables
-ENV JAVA_OPTS="-Xmx512m -Dfile.encoding=UTF-8"
+# Set environment variables - Optimized for Heroku's 512MB limit
+ENV JAVA_OPTS="-Xmx300m -Xms128m -XX:MaxMetaspaceSize=128m -XX:CompressedClassSpaceSize=32m -XX:+UseG1GC -XX:+UseStringDeduplication -XX:+OptimizeStringConcat -Dfile.encoding=UTF-8"
 ENV SKIP_POM_CHECK=true
 
 # Run the application
