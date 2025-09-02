@@ -54,10 +54,14 @@ public final class SMPServerMain
     // Create Jetty server
     final Server server = new Server(port);
     
-    // Set up web application context
+    // Set up web application context - use current JAR as the web application
     final WebAppContext webAppContext = new WebAppContext();
     webAppContext.setContextPath("/");
-    webAppContext.setWar("app.jar"); // Use the JAR as a WAR file
+    
+    // Get the path to the currently running JAR file
+    String jarPath = SMPServerMain.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+    LOGGER.info("Using JAR file as web application: {}", jarPath);
+    webAppContext.setWar(jarPath);
     
     server.setHandler(webAppContext);
 
