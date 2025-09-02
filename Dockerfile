@@ -41,4 +41,4 @@ ENV JAVA_OPTS="-Xmx300m -Xms128m -XX:MaxMetaspaceSize=128m -XX:CompressedClassSp
 ENV SKIP_POM_CHECK=true
 
 # Run the application
-CMD ["sh", "-c", "java $JAVA_OPTS -Dspring.profiles.active=heroku -jar phoss-smp-webapp-mongodb.jar"]
+CMD ["sh", "-c", "java $JAVA_OPTS -Dmongodb.connectionstring=\"$MONGODB_URI\" -Dmongodb.dbname=\"$MONGODB_DBNAME\" -jar phoss-smp-webapp-mongodb.jar"]

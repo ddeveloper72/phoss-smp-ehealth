@@ -3,4 +3,4 @@ build:
   docker:
     web: Dockerfile
 run:
-  web: java -Xmx300m -Xms128m -XX:MaxMetaspaceSize=128m -XX:CompressedClassSpaceSize=32m -XX:+UseG1GC -XX:+UseStringDeduplication -XX:+OptimizeStringConcat -Dfile.encoding=UTF-8 -Dmongodb.connectionstring="${MONGODB_URI}" -Dmongodb.dbname="${MONGODB_DBNAME}" -jar phoss-smp-webapp-mongodb.jar
+  web: java -Xmx300m -Xms128m -XX:MaxMetaspaceSize=128m -XX:CompressedClassSpaceSize=32m -XX:+UseG1GC -XX:+UseStringDeduplication -XX:+OptimizeStringConcat -Dfile.encoding=UTF-8 -jar phoss-smp-webapp-mongodb.jar
