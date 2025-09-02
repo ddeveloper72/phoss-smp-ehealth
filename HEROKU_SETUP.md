@@ -1,12 +1,13 @@
-# Heroku Deployment Setup for phoss SMP
+# Heroku Deployment Setup for phoss SMP (Docker)
 
-## Required Buildpacks
+## Docker Deployment (Recommended)
 
-Your application needs the **Java buildpack**:
+Your application is now configured for Docker deployment on Heroku, which is more reliable than JAR deployment.
 
-```bash
-heroku buildpacks:set heroku/java -a your-app-name
-```
+### Required Files Created:
+- **`Dockerfile`** - Multi-stage build for production-ready container
+- **`heroku.yml`** - Heroku container deployment configuration  
+- **`.dockerignore`** - Optimizes Docker build by excluding unnecessary files
 
 ## Essential Config Variables
 
@@ -25,51 +26,69 @@ heroku config:set SMP_REST_TYPE="bdxr" -a your-app-name
 heroku config:set SMP_PUBLIC_URL="https://your-app-name.herokuapp.com" -a your-app-name
 ```
 
-### 3. Java/Maven Configuration
+### 3. Java/Container Configuration
 ```bash
-# JVM settings for Heroku
-heroku config:set MAVEN_OPTS="-Xmx1024m" -a your-app-name
-heroku config:set JAVA_OPTS="-Dfile.encoding=UTF-8" -a your-app-name
+# JVM settings optimized for containers
+heroku config:set JAVA_OPTS="-Xmx512m -Dfile.encoding=UTF-8" -a your-app-name
 ```
 
-### 4. Certificate Configuration (Optional)
-For production deployment with certificates, you'll need to set:
+## Docker Deployment Steps
+
+### 1. Set Stack to Container
 ```bash
-heroku config:set SMP_KEYSTORE_TYPE="PKCS12" -a your-app-name
-heroku config:set SMP_KEYSTORE_PATH="path/to/keystore" -a your-app-name
-heroku config:set SMP_KEYSTORE_PASSWORD="your-keystore-password" -a your-app-name
-heroku config:set SMP_KEYSTORE_KEY_ALIAS="your-key-alias" -a your-app-name
-heroku config:set SMP_KEYSTORE_KEY_PASSWORD="your-key-password" -a your-app-name
+heroku stack:set container -a your-app-name
 ```
 
-## Files Added for Heroku
+### 2. Set Config Variables
+```bash
+# Set your MongoDB connection string
+heroku config:set MONGODB_URI="your-mongodb-connection-string" -a your-app-name
+heroku config:set DB_NAME="task-manager" -a your-app-name
+heroku config:set SMP_IDENTIFIERTYPE="bdxr" -a your-app-name
+heroku config:set SMP_REST_TYPE="bdxr" -a your-app-name
+heroku config:set SMP_PUBLIC_URL="https://your-app-name.herokuapp.com" -a your-app-name
+```
 
-1. **Procfile** - Tells Heroku how to run your app
-2. **system.properties** - Specifies Java 11 runtime
-3. **application-heroku.properties** - Heroku-specific configuration using environment variables
+### 3. Deploy via Git
+```bash
+git push heroku master
+```
 
-## Deployment Steps
+### 4. Monitor Deployment
+```bash
+# Watch the container build process
+heroku logs --tail -a your-app-name
 
-1. **Create Heroku app:**
-   ```bash
-   heroku create your-app-name
-   ```
+# Check app status
+heroku ps -a your-app-name
+```
 
-2. **Set buildpack and config vars** (use commands above)
+## Docker Benefits
 
-3. **Deploy:**
-   ```bash
-   git push heroku master
-   ```
+✅ **Reliable Builds**: Maven build happens inside container, not affected by Heroku runtime limitations  
+✅ **Consistent Environment**: Same container runs locally and on Heroku  
+✅ **Better Performance**: Optimized JVM settings for containers  
+✅ **Easy Local Testing**: Test the exact same container locally with `docker build`  
 
-4. **Monitor logs:**
-   ```bash
-   heroku logs --tail -a your-app-name
-   ```
+## Local Testing
+
+```bash
+# Build the container locally
+docker build -t phoss-smp-ehealth .
+
+# Run locally (requires your MongoDB connection)
+docker run -p 8080:8080 -e PORT=8080 -e MONGODB_URI="your-connection-string" phoss-smp-ehealth
+```
+
+## Troubleshooting
+
+- **Build Failures**: Check `heroku logs --tail` for build output
+- **Container Won't Start**: Verify config vars are set correctly
+- **Port Issues**: Heroku automatically sets `$PORT` environment variable
 
 ## Important Notes
 
 - Replace `your-app-name` with your actual Heroku app name
-- Replace `YOUR_PASSWORD` with your actual MongoDB password
-- Certificates need special handling in Heroku - consider using external certificate management or encoding them in environment variables
-- The application will be available at `https://your-app-name.herokuapp.com`
+- Replace connection strings with your actual MongoDB credentials  
+- The container uses Java 11 JRE Alpine for optimal size and performance
+- Health checks are built-in for container monitoring

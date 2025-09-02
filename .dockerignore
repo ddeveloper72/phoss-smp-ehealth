@@ -1,0 +1,16 @@
+# Docker ignore file for phoss SMP
+target/
+.git
+.gitignore
+README.md
+*.md
+.env*
+config/application.properties.local
+config/smp-certificates/
+temp-local-data/
+.vscode/
+.idea/
+*.iml
+.mvn/wrapper/
+mvnw
+mvnw.cmd
