@@ -1,8 +1,7 @@
-# heroku.yml for Docker container deployment - Testing pre-built image
+# heroku.yml for Docker container deployment
 build:
   docker:
-    web: 
-      image: phelger/phoss-smp-mongodb:latest
+    web: Dockerfile
 run:
   web: >-
     sh -c 'echo "MongoDB URI: $MONGODB_URI" &&
@@ -12,4 +11,4 @@ run:
     -Dfile.encoding=UTF-8
     -Dmongodb.connectionstring="$MONGODB_URI"
     -Dmongodb.dbname="$MONGODB_DBNAME"
-    -jar /phoss-smp-webapp-mongodb.jar'
+    -jar phoss-smp-webapp-mongodb.jar'
