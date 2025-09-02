@@ -1,1 +1,1 @@
-web: cd phoss-smp-webapp-mongodb && mvn exec:java -Dexec.mainClass="com.helger.phoss.smp.standalone.RunInJettySMPSERVER_MONGODB" -Dexec.classpathScope=test -Dserver.port=$PORT -Dspring.profiles.active=heroku
+web: SKIP_POM_CHECK=true java $JAVA_OPTS -Dspring.profiles.active=heroku -jar phoss-smp-webapp-mongodb/target/phoss-smp-mongodb-standalone.jar

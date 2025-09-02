@@ -34,10 +34,25 @@ public final class RunInJettySMPSERVER_MONGODB
 {
   public static void main (final String... args) throws Exception
   {
-    if (!new File ("pom.xml").exists ())
-      throw new IllegalStateException ("Please make sure your working directory is the directory containing 'pom.xml'");
+    // For Heroku deployment, skip the pom.xml check
+    final String skipPomCheck = System.getenv("SKIP_POM_CHECK");
+    if (skipPomCheck == null || !skipPomCheck.equals("true")) {
+      if (!new File ("pom.xml").exists ())
+        throw new IllegalStateException ("Please make sure your working directory is the directory containing 'pom.xml'");
+    }
 
-    new JettyStarter (RunInJettySMPSERVER_MONGODB.class).setPort (90)
+    // Get port from environment variable (for Heroku) or use default
+    String portStr = System.getenv("PORT");
+    int port = 90; // Default port
+    if (portStr != null && !portStr.trim().isEmpty()) {
+      try {
+        port = Integer.parseInt(portStr);
+      } catch (NumberFormatException e) {
+        System.err.println("Invalid PORT environment variable: " + portStr + ", using default port 90");
+      }
+    }
+
+    new JettyStarter (RunInJettySMPSERVER_MONGODB.class).setPort (port)
                                                         .setStopPort (x -> x + 1000)
                                                         .setSessionCookieName ("SMPSESSION")
                                                         .run ();
