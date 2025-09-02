@@ -120,6 +120,58 @@
         <groupId>com.helger.maven</groupId>
         <artifactId>ph-csscompress-maven-plugin</artifactId>
       </plugin>
+      <!-- Copy compiled classes to proper location for shading -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <version>3.1.0</version>
+        <executions>
+          <execution>
+            <phase>pre-integration-test</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <configuration>
+              <target>
+                <!-- Copy main classes -->
+                <copy todir="${project.build.directory}/classes">
+                  <fileset dir="${project.build.directory}/classes"/>
+                </copy>
+                <!-- Copy test classes that include our main class -->
+                <copy todir="${project.build.directory}/classes" failonerror="false">
+                  <fileset dir="${project.build.directory}/test-classes"/>
+                </copy>
+                <!-- Unpack WAR and extract classes to proper location -->
+                <unzip src="${project.build.directory}/${project.artifactId}-${project.version}.war" dest="${project.build.directory}/war-unpacked"/>
+                <copy todir="${project.build.directory}/classes">
+                  <fileset dir="${project.build.directory}/war-unpacked/WEB-INF/classes"/>
+                </copy>
+              </target>
+            </configuration>
+          </execution>
+          <execution>
+            <id>fix-jar-structure</id>
+            <phase>post-integration-test</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <configuration>
+              <target>
+                <!-- Fix the JAR structure by moving WEB-INF/classes to root -->
+                <mkdir dir="${project.build.directory}/jar-temp"/>
+                <unjar src="${project.build.directory}/phoss-smp-mongodb-standalone.jar" dest="${project.build.directory}/jar-temp"/>
+                <copy todir="${project.build.directory}/jar-temp">
+                  <fileset dir="${project.build.directory}/jar-temp/WEB-INF/classes"/>
+                </copy>
+                <delete dir="${project.build.directory}/jar-temp/WEB-INF"/>
+                <jar destfile="${project.build.directory}/phoss-smp-webapp-mongodb.jar" manifest="${project.build.directory}/jar-temp/META-INF/MANIFEST.MF">
+                  <fileset dir="${project.build.directory}/jar-temp"/>
+                </jar>
+              </target>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
       <!-- Maven Shade Plugin to create executable JAR -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -127,7 +179,7 @@
         <version>3.4.1</version>
         <executions>
           <execution>
-            <phase>package</phase>
+            <phase>integration-test</phase>
             <goals>
               <goal>shade</goal>
             </goals>
