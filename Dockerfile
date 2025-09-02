@@ -41,4 +41,4 @@ ENV JAVA_OPTS="-Xmx512m -Dfile.encoding=UTF-8"
 ENV SKIP_POM_CHECK=true
 
 # Run the application
-CMD ["sh", "-c", "java $JAVA_OPTS -Dspring.profiles.active=heroku -cp phoss-smp-webapp-mongodb.jar com.helger.phoss.smp.app.SMPServerMain"]
+CMD ["sh", "-c", "java $JAVA_OPTS -Dspring.profiles.active=heroku -jar phoss-smp-webapp-mongodb.jar"]
