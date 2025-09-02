@@ -142,12 +142,14 @@
                 <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
               </transformers>
               <finalName>phoss-smp-mongodb-standalone</finalName>
-              <!-- Include everything including test dependencies -->
+              <!-- Include everything including current project -->
               <artifactSet>
                 <includes>
                   <include>*:*</include>
                 </includes>
               </artifactSet>
+              <!-- Include current project's classes -->
+              <outputFile>${project.build.directory}/phoss-smp-mongodb-standalone.jar</outputFile>
               <filters>
                 <filter>
                   <artifact>*:*</artifact>
@@ -156,6 +158,12 @@
                     <exclude>META-INF/*.DSA</exclude>
                     <exclude>META-INF/*.RSA</exclude>
                   </excludes>
+                </filter>
+                <filter>
+                  <artifact>com.helger:phoss-smp-webapp-mongodb</artifact>
+                  <includes>
+                    <include>**</include>
+                  </includes>
                 </filter>
               </filters>
             </configuration>

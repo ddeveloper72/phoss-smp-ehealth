@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+Created-By: Maven WAR Plugin 3.4.0
+Build-Jdk-Spec: 17
+Implementation-Title: phoss-smp-webapp-mongodb
+Implementation-Version: 7.2.7-SNAPSHOT
+Implementation-Vendor: Philip Helger
+Main-Class: com.helger.phoss.smp.app.SMPServerMain
+
