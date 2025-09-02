@@ -1,1 +1,1 @@
-web: SKIP_POM_CHECK=true java $JAVA_OPTS -Dspring.profiles.active=heroku -jar phoss-smp-webapp-mongodb/target/phoss-smp-mongodb-standalone.jar
+web: sh -c 'echo "MongoDB URI: $MONGODB_URI" && echo "MongoDB DB: $MONGODB_DBNAME" && SKIP_POM_CHECK=true java $JAVA_OPTS -Dlog4j2.level=DEBUG -Dmongodb.connectionstring="$MONGODB_URI" -Dmongodb.dbname="$MONGODB_DBNAME" -jar phoss-smp-webapp-mongodb.jar'
