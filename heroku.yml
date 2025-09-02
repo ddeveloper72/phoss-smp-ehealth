@@ -3,4 +3,4 @@ build:
   docker:
     web: Dockerfile
 run:
-  web: java $JAVA_OPTS -Dspring.profiles.active=heroku -jar app.jar
+  web: java -XX:MaxRAMPercentage=80 -cp phoss-smp-webapp-mongodb.jar com.helger.phoss.smp.app.SMPServerMain

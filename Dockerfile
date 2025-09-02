@@ -21,7 +21,7 @@ RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 WORKDIR /app
 
 # Copy the executable JAR from builder stage
-COPY --from=builder /app/phoss-smp-webapp-mongodb/target/phoss-smp-mongodb-standalone.war ./app.jar
+COPY --from=builder /app/phoss-smp-webapp-mongodb/target/phoss-smp-mongodb-standalone.war ./phoss-smp-webapp-mongodb.jar
 
 # Create config directory
 RUN mkdir -p /app/config && chown -R appuser:appgroup /app
@@ -41,4 +41,4 @@ ENV JAVA_OPTS="-Xmx512m -Dfile.encoding=UTF-8"
 ENV SKIP_POM_CHECK=true
 
 # Run the application
-CMD ["sh", "-c", "java $JAVA_OPTS -Dspring.profiles.active=heroku -jar app.jar"]
+CMD ["sh", "-c", "java $JAVA_OPTS -Dspring.profiles.active=heroku -cp phoss-smp-webapp-mongodb.jar com.helger.phoss.smp.app.SMPServerMain"]
