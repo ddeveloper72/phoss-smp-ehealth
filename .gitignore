@@ -1,23 +1,105 @@
+# ===================================
+# SECURITY - SENSITIVE DATA PROTECTION
+# ===================================
+
+# Configuration files with secrets
+config/application.properties.local
+config/application.properties.secure
+config/application.properties.prod*
+config/*.local
+config/*.secure
+config/*.prod*
+
+# Certificate and keystore files
+config/smp-certificates/
+**/*.p12
+**/*.jks
+**/*.pfx
+**/*.pem
+**/*.crt
+**/*.key
+**/*.keystore
+**/*.truststore
+
+# MongoDB connection strings and credentials
+**/application.properties
+!**/src/main/resources/application.properties
+!**/src/test/resources/application.properties
+!docker/example-config-dir/application.properties
+
+# Environment files
+.env
+.env.*
+*.env
+
+# Scripts with credentials (customize as needed)
+*-local.sh
+*-secure.sh
+*-prod.sh
+
+# Backup files that might contain secrets
+*.properties.bak
+*.properties.backup
+*.config.bak
+*.sh.bak
+
+# ===================================
+# DEVELOPMENT FILES
+# ===================================
+
+# Database files
 db-*-smp.sql
 demo*.png
 hs_err_*.log
+
+# Private and production files
 private-*
 prod.*
 _*.cmd
+
+# IDE files
 *.iml
-*.jks
-*.p12
-
 .settings/ 
-bin/
-generated/
-target/
-
 .factorypath
 .classpath
 .DS_Store
 .pmd
 .project
+
+# Build artifacts
+bin/
+generated/
+target/
+temp-local-data/
+
+# Maven
 pom.xml.releaseBackup
 release.properties
+
+# Logs
+logs/
+*.log
+*.log.*
+
+# Temporary files
+tmp/
+temp/
 zz
+*.tmp
+*.temp
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# ===================================
+# DOCKER SECRETS
+# ===================================
+docker-compose.override.yml
+docker-compose.local.yml
+docker-compose.prod.yml

@@ -1,0 +1,19 @@
+# Dockerfile for phoss SMP with secure environment variable support
+FROM phelger/phoss-smp-mongodb:7.2.6
+
+# Create config directory
+RUN mkdir -p /config
+
+# Copy the secure application.properties template
+COPY config/application.properties.secure /config/application.properties
+
+# Set the config file environment variable
+ENV CONFIG_FILE=/config/application.properties
+
+# Heroku port support
+ENV PORT=8080
+EXPOSE $PORT
+
+# Health check endpoint
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
+  CMD curl -f http://localhost:$PORT/ || exit 1

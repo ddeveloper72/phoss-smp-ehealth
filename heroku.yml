@@ -1,0 +1,6 @@
+# heroku.yml for container deployment with environment variables
+build:
+  docker:
+    web: Dockerfile.secure
+run:
+  web: java $JAVA_OPTS -Djava.security.egd=file:/dev/urandom -XX:InitialRAMPercentage=10 -XX:MinRAMPercentage=50 -XX:MaxRAMPercentage=80 -jar /usr/local/tomcat/bin/bootstrap.jar

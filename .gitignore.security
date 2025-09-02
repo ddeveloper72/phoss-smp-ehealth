@@ -1,0 +1,29 @@
+# Security Guidelines for phoss SMP Environment Variables
+
+## NEVER commit these files to version control:
+.env
+.env.local
+.env.production
+application.properties.local
+**/config/**/*.properties
+!**/config/**/*.properties.example
+!**/config/**/*.properties.template
+
+## Heroku Config Vars
+heroku/
+heroku-env/
+
+## Local development secrets
+local-config/
+dev-secrets/
+
+## Certificate files
+*.p12
+*.jks
+*.pem
+*.key
+*.crt
+
+## Logs containing sensitive information  
+logs/
+*.log
