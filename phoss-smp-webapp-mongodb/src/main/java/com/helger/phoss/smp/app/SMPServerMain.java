@@ -58,6 +58,13 @@ public final class SMPServerMain
     final WebAppContext webAppContext = new WebAppContext();
     webAppContext.setContextPath("/");
     
+    // Disable JSP servlet to prevent initialization issues
+    webAppContext.setInitParameter("org.eclipse.jetty.servlet.Default.dirAllowed", "false");
+    webAppContext.setInitParameter("org.eclipse.jetty.servlet.jspInit", "false");
+    webAppContext.setInitParameter("org.eclipse.jetty.jsp.precompiled", "true");
+    webAppContext.setAttribute("org.eclipse.jetty.server.webapp.ContainerIncludeJarPattern", 
+                              ".*/[^/]*servlet-api-[^/]*\\.jar$|.*/javax.servlet.jsp.jstl-.*\\.jar$|.*/[^/]*taglibs.*\\.jar$");
+    
     // Get the path to the currently running JAR file
     String jarPath = SMPServerMain.class.getProtectionDomain().getCodeSource().getLocation().getPath();
     LOGGER.info("Using JAR file as web application: {}", jarPath);
