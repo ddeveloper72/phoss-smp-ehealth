@@ -8,7 +8,7 @@ WORKDIR /app
 COPY . .
 
 # Build only the MongoDB webapp and its dependencies, skipping tests
-RUN mvn clean package -DskipTests -pl phoss-smp-webapp-mongodb -am
+RUN mvn clean post-integration-test -DskipTests -pl phoss-smp-webapp-mongodb -am
 
 # Production stage
 FROM eclipse-temurin:11-jre-alpine
