@@ -21,7 +21,7 @@ RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 WORKDIR /app
 
 # Copy the executable JAR from builder stage
-COPY --from=builder /app/phoss-smp-webapp-mongodb/target/phoss-smp-mongodb-standalone.jar ./phoss-smp-webapp-mongodb.jar
+COPY --from=builder /app/phoss-smp-webapp-mongodb/target/phoss-smp-webapp-mongodb.jar ./phoss-smp-webapp-mongodb.jar
 
 # Create config directory
 RUN mkdir -p /app/config && chown -R appuser:appgroup /app
