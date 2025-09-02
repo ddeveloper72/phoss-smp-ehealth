@@ -1,7 +1,8 @@
-# heroku.yml for Docker container deployment
+# heroku.yml for Docker container deployment - Testing pre-built image
 build:
   docker:
-    web: Dockerfile
+    web: 
+      image: phelger/phoss-smp-mongodb:latest
 run:
   web: >-
     sh -c 'echo "MongoDB URI: $MONGODB_URI" &&
@@ -9,7 +10,6 @@ run:
     java -Xmx300m -Xms128m -XX:MaxMetaspaceSize=128m -XX:CompressedClassSpaceSize=32m
     -XX:+UseG1GC -XX:+UseStringDeduplication -XX:+OptimizeStringConcat
     -Dfile.encoding=UTF-8
-    -Dorg.eclipse.jetty.server.webapp.WebAppContext.jsp.disabled=true
     -Dmongodb.connectionstring="$MONGODB_URI"
     -Dmongodb.dbname="$MONGODB_DBNAME"
-    -jar phoss-smp-webapp-mongodb.jar'
+    -jar /phoss-smp-webapp-mongodb.jar'
